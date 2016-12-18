@@ -18,7 +18,9 @@ class Refactor
         original_file = FileUtil.create(filepath, modified_text, true)
         total_results << new_files
       end
-      total_results.flatten
+      total_results.flatten!
+      update_xcodeproj(total_results)
+      total_results      
     end
 
     def swift_files
@@ -26,6 +28,29 @@ class Refactor
     end
 
     private
+
+    def update_xcodeproj(new_files)
+      xcpath = self.path.split.first
+      new_files.each do |f|
+        pathname = Pathname(f)        
+        f_split = pathname.split
+        relative = f_split.last
+        while xcpath != f_split.first
+          f_split = f_split.first.split
+          relative = f_split.last.join relative
+        end
+        puts "Xcode project file: #{relative}".blue
+        comps = relative.to_s.split("/")
+        comps.pop
+        comps.each do |c|
+          unless group = self.main_group[c]
+            group = self.main_group.new_group(c, pathname.split.first)
+          end
+          group.new_file(pathname)
+        end
+        self.save
+      end
+    end
 
     def parse_file(file)
       return unless text = File.readlines(file).join

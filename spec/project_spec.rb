@@ -30,7 +30,7 @@ describe Refactor::Project do
       result = @refactor.parse
       expect(result).not_to be(nil)
       expect(result.count).to eq 2
-      cleanup_files(result)
+      # cleanup_files(result)
     end
   end
 end
