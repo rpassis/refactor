@@ -5,17 +5,21 @@ class Refactor
   class Project < Xcodeproj::Project    
 
     def parse
-      files.each do |f| 
-        next unless f.path.end_with?(".swift") 
+      all_new_files = []
+      swift_files.each do |f| 
         filepath = f.real_path
         results = parse_file(filepath)
+        next unless results.count > 0
         file_dir = File.dirname(filepath)
-        puts "Creating the following files at #{file_dir}: #{results}".green
         new_files = FileUtil.create_files(file_dir, results)
         new_files.each { |f| puts "#{f}".green }
-        true
+        all_new_files << new_files
       end
-      true
+      all_new_files.flatten
+    end
+
+    def swift_files
+      files.reject { |f| f.path.end_with?(".swift") == false }
     end
 
     private

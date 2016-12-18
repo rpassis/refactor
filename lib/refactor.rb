@@ -1,4 +1,3 @@
-require "refactor/main"
 require "refactor/version"
 require "refactor/parser"
 require "refactor/options"

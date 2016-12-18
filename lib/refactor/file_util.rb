@@ -6,7 +6,7 @@ class Refactor
       files = []      
       parsed_results.each do |p|
         file_path = File.join(original_file_dir, p.name)
-        puts "Creating new file #{file_path}".green
+        puts "Creating new file: #{p.name}".yellow
         create(file_path, p.lines)
         files << file_path
       end
