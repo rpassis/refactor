@@ -29,7 +29,14 @@ describe Parser do
     it "parses `text` and stores results in `results`" do
       @p.start
       expect(@p.results).not_to be(nil)
-      expect(@p.results.count).to equal(2)
+      expect(@p.results.count).to equal(@s.number_of_files)
+    end
+  end
+
+  describe("#modified_source_text") do
+    it "returns a modified version of the original text that excludes parsed lines" do
+      @p.start
+      expect(@p.modified_source_text).to eq(@s.modified_text)
     end
   end
 end

@@ -5,14 +5,19 @@ class Parser
   TRIGGER_STRING  = "//FILE:"
   BLOCK_NAME_REGEXP = /\.(swift)$/
 
-  attr_reader :text
+  attr_reader :text, :lines, :modified_source_text
 
   def initialize(text)
     @text = text
+    @lines = text.split("\n")
   end
     
   def start
-    lines.each { |l| parse_line(l) }
+    found_indexes = []
+    lines.each_with_index do |l, i| 
+      found_indexes << i if parse_line(l) == true          
+    end    
+    modified_original_text(found_indexes) if found_indexes.count > 0
   end
 
   def results
@@ -26,8 +31,9 @@ class Parser
   
   private
 
-  def lines
-    text.split("\n")
+  def modified_original_text(indexes_to_remove)
+    new_lines = lines.reject.with_index { |l, i| indexes_to_remove.include? i }    
+    @modified_source_text = new_lines.join("\n")
   end
 
   def parse_line(l)
@@ -37,9 +43,9 @@ class Parser
       set_block_name(l)
       @block_lines = []
       @token_count = 0
-      return
+      return true
     end
-    return if @block_name.nil?
+    return false if @block_name.nil?
     @token_count += l.count("{") # Increase count for opening {
     @token_count -= l.count("}") # Decrease count for closing }
     @block_lines << l unless @block_name.nil?
@@ -47,9 +53,8 @@ class Parser
     if @token_count == 0
       results << Result.new(@block_name, @block_lines)       
       @block_name = nil
-    else
-      
     end
+    return true
   end
 
   def find_trigger(l)

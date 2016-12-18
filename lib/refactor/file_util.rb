@@ -13,6 +13,10 @@ class Refactor
       files
     end
 
+    def self.update_file(path, contents)
+      File.open(path, "w+") { |f| f.puts(contents) }
+    end
+    
     private
 
     def self.create(file_path, content)
