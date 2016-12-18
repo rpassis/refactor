@@ -15,7 +15,7 @@ class Refactor
         next unless results && results.count > 0
         file_dir = File.dirname(filepath)
         new_files = FileUtil.create_files(file_dir, results)
-        original_file = FileUtil.update_file(filepath, modified_text)
+        original_file = FileUtil.create(filepath, modified_text, true)
         total_results << new_files
       end
       total_results.flatten

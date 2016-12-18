@@ -13,21 +13,17 @@ class Refactor
       files
     end
 
-    def self.update_file(path, contents)
-      File.open(path, "w+") { |f| f.puts(contents) }
-    end
-    
-    private
-
-    def self.create(file_path, content)
-      if File.exists?(file_path)
+    def self.create(file_path, content, overwrite = false)
+      if File.exists?(file_path) && overwrite == false
         puts "Destination file already exists at #{file_path}, skipping...".yellow
         return
       end
       create_folder_if_required(File.dirname(file_path))
       File.open(file_path, "w+") { |f| f.puts(content) }    
     end
-
+    
+    private
+  
     def self.create_folder_if_required(dirname)
       unless File.directory?(dirname)
         FileUtils.mkdir_p(dirname)
