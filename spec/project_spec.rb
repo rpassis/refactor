@@ -28,12 +28,9 @@ describe Refactor::Project do
   describe("#parse") do
     it "parses the matching files" do
       result = @refactor.parse
-      expect(@refactor.parse).not_to be(nil)
+      expect(result).not_to be(nil)
+      expect(result.count).to eq 2
       cleanup_files(result)
     end
   end
-end
-
-def cleanup_files(files)
-  files.each { |f| File.delete(f) }
 end
