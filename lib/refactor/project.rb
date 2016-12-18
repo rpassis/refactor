@@ -8,16 +8,16 @@ class Refactor
     # Create new files as needed and returns a flattened
     # array of all files created
     def parse
-      results = []      
+      total_results = []      
       swift_files.each do |f| 
         filepath = f.real_path
         results = parse_file(filepath)
         next unless results.count > 0
         file_dir = File.dirname(filepath)
         new_files = FileUtil.create_files(file_dir, results)
-        results << new_files
+        total_results << new_files
       end
-      results.flatten
+      total_results.flatten
     end
 
     def swift_files
