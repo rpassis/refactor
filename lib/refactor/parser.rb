@@ -2,7 +2,7 @@ require 'refactor/parser_result'
 
 class Parser
 
-  TRIGGER_STRING  = "// FILE"
+  TRIGGER_STRING  = "//FILE:"
   BLOCK_NAME_REGEXP = /\.(swift)$/
 
   attr_reader :text
@@ -42,17 +42,18 @@ class Parser
     return if @block_name.nil?
     @token_count += l.count("{") # Increase count for opening {
     @token_count -= l.count("}") # Decrease count for closing }
+    @block_lines << l unless @block_name.nil?
     # When token_count == 0 we are done with the block
     if @token_count == 0
       results << Result.new(@block_name, @block_lines)       
       @block_name = nil
     else
-      @block_lines << l unless @block_name.nil?
+      
     end
   end
 
   def find_trigger(l)
-    true if l.include? '//FILE'
+    true if l.include? TRIGGER_STRING
   end
 
   # Sets the name of the block of code that is about to get parsed

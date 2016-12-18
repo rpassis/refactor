@@ -1,17 +1,17 @@
 require "spec_helper"
-require 'factory'
+require 'factory/source_code'
 
 describe Parser do
   before do 
-    @text = Factory.text
-    @p = Parser.new(@text)
+    @s = Factory::SourceCode.new
+    @p = Parser.new(@s.text)
   end
 
   describe(".process") do
-    subject { Parser.process(@text) }
+    subject { Parser.process(@s.text) }
     it "creates a new parser instance, parses the `text` and returns the results" do
       expect(subject).not_to be(nil)
-      expect(subject.count).to equal(2)
+      expect(subject.count).to equal(@s.number_of_files)
     end
   end
 
@@ -21,7 +21,7 @@ describe Parser do
     end
 
     it "sets a `text` property with the correct value" do
-      expect(@p.text).to equal(@text)
+      expect(@p.text).to eq(@s.text)
     end
   end
   

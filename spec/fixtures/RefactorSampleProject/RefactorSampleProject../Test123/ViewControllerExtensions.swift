@@ -1,4 +1,0 @@
-extension ViewController {
-    func testVC() {
-        
-    }
