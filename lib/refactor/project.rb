@@ -11,10 +11,11 @@ class Refactor
       total_results = []      
       swift_files.each do |f| 
         filepath = f.real_path
-        results = parse_file(filepath)
-        next unless results.count > 0
+        results, modified_text = parse_file(filepath)
+        next unless results && results.count > 0
         file_dir = File.dirname(filepath)
         new_files = FileUtil.create_files(file_dir, results)
+        original_file = FileUtil.update_file(filepath, modified_text)
         total_results << new_files
       end
       total_results.flatten
@@ -28,7 +29,9 @@ class Refactor
 
     def parse_file(file)
       return unless text = File.readlines(file).join
-      Parser.process(text)
+      p = Parser.new(text)
+      p.start
+      return p.results, p.modified_source_text
     end
 
   end
