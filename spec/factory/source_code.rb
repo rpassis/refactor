@@ -1,5 +1,10 @@
-class Factory
-  def self.text
+module Factory
+  class SourceCode
+    def number_of_files
+      2
+    end
+  
+    def text
 "
 //FILE: ../Test123/Test.swift
 extension {
@@ -19,5 +24,6 @@ extension AnotherTest {
   }
 }
 "
+    end
   end
 end

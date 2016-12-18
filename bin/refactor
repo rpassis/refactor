@@ -1,0 +1,24 @@
+#!/usr/bin/env ruby
+
+require "clamp"
+require "refactor"
+
+Clamp do
+
+  parameter "xcodeproj", "Path to the xcodeproj", :attribute_name => :xcodeproj_path
+  option ["--quiet", "-q"], :flag, "Quiet more"
+  option ["--version", "-v"], :flag, "Shows refactor version" do
+    puts "Refactor version #{Refactor::VERSION}"
+    exit(0)
+  end
+
+  def execute
+    if Process.uid == 0
+      puts "You cannot run Refactor as root.".red
+    else
+      refactor = Refactor::Project.open(xcodeproj_path)
+      refactor.parse
+    end
+  end
+
+end
