@@ -13,11 +13,12 @@ class Parser
   end
     
   def start
-    found_indexes = []
+    original_lines_to_remove = []
     lines.each_with_index do |l, i| 
-      found_indexes << i if parse_line(l) == true          
+      original_lines_to_remove << i if parse_line(l) == true          
     end    
-    modified_original_text(found_indexes) if found_indexes.count > 0
+    set_modified_source_text_with(original_lines_to_remove) if \
+    original_lines_to_remove.count > 0
   end
 
   def results
@@ -26,12 +27,13 @@ class Parser
 
   def self.process(text)
     p = Parser.new(text)
-    p.start && p.results
+    p.start
+    return p.results, p.modified_source_text
   end
   
   private
 
-  def modified_original_text(indexes_to_remove)
+  def set_modified_source_text_with(indexes_to_remove)
     new_lines = lines.reject.with_index { |l, i| indexes_to_remove.include? i }    
     @modified_source_text = new_lines.join("\n")
   end
