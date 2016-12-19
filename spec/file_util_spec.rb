@@ -1,16 +1,23 @@
 require "spec_helper"
+require "pathname"
 require "refactor/parser_result"
 
 describe Refactor::FileUtil do
 
-  describe "#create_files" do    
-    it "creates files in their respective paths" do
-      f = "./spec/../tests/file.swift"
-      r = Parser::Result.new("test.swift", ["first line 1","2","3","last line 4"])
-      parser_results = [r]   
-      files = Refactor::FileUtil.create_files(f, parser_results)
-      expect(files.count).to eq(parser_results.count) 
-      files.each { |f| File.delete(f) }
+  describe "#create_file" do    
+    it "creates a file at a given path and content" do
+      file = "./spec/../tests/file.swift"
+      contents = 
+"first line 1
+2
+3
+last line 4
+"
+      Refactor::FileUtil.create(file, contents)
+      p = Pathname(file).expand_path
+      c = File.read(p)
+      expect(c).to eq(contents)
+      File.delete(file)
     end
     
   end
