@@ -28,14 +28,5 @@ describe Refactor::Project do
   describe("#parse") do
     pending "parses the matching files"
   end
-
-  describe("#update_with") do
-    it "updates the xcodeproj with given files and respective paths" do      
-      project_dir = @refactor.path.split.first.to_s
-      new_file = File.join(project_dir, "a/b/c/d/e.swift")
-      @refactor.update_with(new_file)
-      f = @refactor.swift_files.any? { |sf| sf.real_path == new_file }
-      expect(f).to be true
-    end
-  end
+  
 end

@@ -12,7 +12,7 @@ class AppDelegate {
   }
 }
 
-//FILE: ../Test123/Test.swift
+// FILE: ../Test123/Test.swift
 extension {
     Testing 123
     Next line
@@ -22,12 +22,15 @@ extension {
         }
     }
 }
-//FILE: AnotherTest.swift
+// END
+// FILE: AnotherTest.swift
+
 extension AnotherTest {
   func test() {
     print(\"a\")    
   }
 }
+// END
 "
     end
 
