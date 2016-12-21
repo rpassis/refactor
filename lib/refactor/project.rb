@@ -17,15 +17,16 @@ class Refactor
     #
     def parse
       swift_files.each do |f| 
-        original_filepath = f.real_path
+        original_filepath = f.real_path        
         results, modified_text = parse_file(original_filepath)
         next unless results && results.count > 0
+        target = find_target_for_file(f)
         original_file_dir = File.dirname(original_filepath)
         # Create new files starting from the original file folder and appending the
         # relative filename specified in the each of the results array
         new_files = create_new_files(original_file_dir, results)
         # Update and save the xcodeproj with the new files and their respective groups
-        new_files.each { |nf| update_with(nf) }
+        new_files.each { |nf| update_with(nf, target) }
         # Once all the new files have been created, we need to remove the parsed text
         # from the original file
         FileUtil.create(original_filepath, modified_text, overwrite = true)
@@ -41,7 +42,15 @@ class Refactor
 
     private
     
-    def update_with(new_file)
+    def find_target_for_file(file)
+      targets.each do |t|
+        match = t.source_build_phase.files.any? \
+          { |bf| bf.file_ref.real_path == file.real_path }
+        return t if match == true
+      end
+    end
+
+    def update_with(new_file, target)
       pathname = Pathname(new_file).expand_path     
       xcpath = self.path.split.first            
       unless pathname.is_underneath?(xcpath)
@@ -63,7 +72,10 @@ class Refactor
         end
         file_group = new_file_group
       end
-      file_group.new_file(pathname)      
+      file_ref = file_group.new_file(pathname)        
+      unless target.resources_build_phase.files_references.include?(file_ref)
+        target.add_resources([file_ref])
+      end
     end
 
     def create_new_files(dir, parser_results)
