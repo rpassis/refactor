@@ -39,6 +39,8 @@ class Refactor
       files.reject { |f| f.path.end_with?(".swift") == false }
     end    
 
+    private
+    
     def update_with(new_file)
       pathname = Pathname(new_file).expand_path     
       xcpath = self.path.split.first            
@@ -63,8 +65,6 @@ class Refactor
       end
       file_group.new_file(pathname)      
     end
-
-    private
 
     def create_new_files(dir, parser_results)
       files = []      
