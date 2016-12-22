@@ -6,6 +6,13 @@ module Factory
   
     def text
 "
+// Comment line 1
+// Comment line 2
+// Comment line 3
+
+import UIKit
+import FrameworkABC
+
 class AppDelegate {
   func test() {
     print('tested')

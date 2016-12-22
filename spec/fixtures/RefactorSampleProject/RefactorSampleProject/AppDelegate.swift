@@ -43,9 +43,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 }
 
-//FILE: Test.swift
+// FILE: Test.swift
 extension AppDelegate {
     func test() {
         print("this is a test")
     }
 }
+// END

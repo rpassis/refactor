@@ -26,7 +26,10 @@ describe Refactor::Project do
   end
   
   describe("#parse") do
-    pending "parses the matching files"
+    it "parses the matching files" do
+      @refactor.parse
+      expect(@refactor.swift_files.count).to be > 3
+    end
   end
   
 end

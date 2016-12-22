@@ -34,6 +34,27 @@ class Parser
   
   private
 
+  def file_header
+    @file_header ||= get_header
+  end
+
+  def get_header
+    header_lines = []
+    found_import = false
+    lines.each do |l|
+      if l.start_with? "//"
+        header_lines << l         
+      elsif l.start_with? "import"
+        found_import = true
+        header_lines << l
+      elsif found_import == true
+        header_lines << "\n"
+        break
+      end
+    end
+    header_lines
+  end
+
   def set_modified_source_text_with(indexes_to_remove)
     new_lines = lines.reject.with_index { |l, i| indexes_to_remove.include? i }    
     @modified_source_text = new_lines.join("\n")
@@ -49,7 +70,8 @@ class Parser
     end
     return false if @block_name.nil?
     if find_end_trigger(l) == true
-      results << Result.new(@block_name, @block_lines)
+      final_content = file_header + @block_lines
+      results << Result.new(@block_name, final_content)
       @block_name = nil
       return true
     end
