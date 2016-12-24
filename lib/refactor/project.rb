@@ -73,7 +73,7 @@ class Refactor
         file_group = new_file_group
       end
       file_ref = file_group.new_file(pathname)    
-      file_ref.source_tree = "SOURCE_ROOT"
+      file_ref.source_tree = "<group>"
       unless target.resources_build_phase.files_references.include?(file_ref)
         target.add_resources([file_ref])
       end
